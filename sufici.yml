@@ -1,6 +1,6 @@
 version: "1.0"
 
-name: React Frontend Build & Docker Push
+name: React Frontend Docker Build
 
 environment:
   NODE_ENV: production
@@ -41,14 +41,5 @@ stages:
       - name: Build Docker Image
         image: docker:24
         commands:
-          - docker build -t $DOCKERHUB_USERNAME/$IMAGE_NAME:$IMAGE_TAG .
-
-      - name: Login to Docker Hub
-        image: docker:24
-        commands:
-          - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-
-      - name: Push Image to Docker Hub
-        image: docker:24
-        commands:
-          - docker push $DOCKERHUB_USERNAME/$IMAGE_NAME:$IMAGE_TAG
+          - docker build -t $IMAGE_NAME:$IMAGE_TAG .
+          - echo "Docker image build completed"
