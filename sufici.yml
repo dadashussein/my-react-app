@@ -3,7 +3,6 @@ version: "1.0"
 name: React Frontend Docker Build
 
 environment:
-  NODE_ENV: production
   IMAGE_NAME: react-frontend
   IMAGE_TAG: latest
 
