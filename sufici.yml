@@ -22,7 +22,7 @@ stages:
       - name: Install Dependencies
         image: node:20
         commands:
-          - npm ci
+          - npm install
 
       - name: Run Tests
         image: node:20
