@@ -8,35 +8,7 @@ environment:
   IMAGE_TAG: latest
 
 stages:
-  - name: Build
-    steps:
-      - name: System Info
-        image: node:20
-        commands:
-          - node -v
-          - npm -v
-          - pwd
-          - ls -la
-          - echo "Build started"
-
-      - name: Install Dependencies
-        image: node:20
-        commands:
-          - npm install
-
-      - name: Run Tests
-        image: node:20
-        commands:
-          - npm test -- --watch=false || echo "No tests configured"
-        allow_failure: true
-
-      - name: Build React App
-        image: node:20
-        commands:
-          - npm run build
-          - ls -la build
-
-  - name: Docker
+  - name: Build and tag Docker image
     steps:
       - name: Build Docker Image
         image: docker:24
