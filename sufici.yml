@@ -12,5 +12,5 @@ stages:
       - name: Build Docker Image
         image: docker:24
         commands:
-          - docker build -t $IMAGE_NAME:$IMAGE_TAG .
+          - docker build -t das .
           - echo "Docker image build completed"
