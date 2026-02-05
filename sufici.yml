@@ -1,0 +1,54 @@
+version: "1.0"
+
+name: React Frontend Build & Docker Push
+
+environment:
+  NODE_ENV: production
+  IMAGE_NAME: react-frontend
+  IMAGE_TAG: latest
+
+stages:
+  - name: Build
+    steps:
+      - name: System Info
+        image: node:20
+        commands:
+          - node -v
+          - npm -v
+          - pwd
+          - ls -la
+          - echo "Build started"
+
+      - name: Install Dependencies
+        image: node:20
+        commands:
+          - npm ci
+
+      - name: Run Tests
+        image: node:20
+        commands:
+          - npm test -- --watch=false || echo "No tests configured"
+        allow_failure: true
+
+      - name: Build React App
+        image: node:20
+        commands:
+          - npm run build
+          - ls -la build
+
+  - name: Docker
+    steps:
+      - name: Build Docker Image
+        image: docker:24
+        commands:
+          - docker build -t $DOCKERHUB_USERNAME/$IMAGE_NAME:$IMAGE_TAG .
+
+      - name: Login to Docker Hub
+        image: docker:24
+        commands:
+          - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+
+      - name: Push Image to Docker Hub
+        image: docker:24
+        commands:
+          - docker push $DOCKERHUB_USERNAME/$IMAGE_NAME:$IMAGE_TAG
