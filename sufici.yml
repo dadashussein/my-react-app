@@ -1,6 +1,12 @@
 version: "1.0"
 
 name: React Frontend Docker Build
+triggers:
+  branches:
+    - main
+    - develop
+    - "*"  # All branches
+  pullRequests: true
 
 environment:
   IMAGE_NAME: react-frontend
