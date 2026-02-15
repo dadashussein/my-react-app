@@ -1,6 +1,6 @@
 version: "1.0"
-
 name: React Frontend Docker Build
+
 triggers:
   branches:
     - main
@@ -13,10 +13,31 @@ environment:
   IMAGE_TAG: latest
 
 stages:
-  - name: Build and tag Docker image
+  - name: Build Docker Image
     steps:
-      - name: Build Docker Image
-        image: docker:24
+      - name: Build Docker Image with Kaniko
+        # ✅ NEW WAY: Kaniko automatically detects Dockerfile
+        # No need for "image: docker:24" or "docker build" commands
+        # Just specify build configuration
         commands:
-          - docker build -t das .
-          - echo "Docker image build completed"
+          - echo "Building Docker image with Kaniko..."
+          - echo "Image: ${IMAGE_NAME}:${IMAGE_TAG}"
+        
+        # Build arguments (optional)
+        buildArgs:
+          NODE_VERSION: "20"
+          BUILD_ENV: production
+        
+        # Uncomment to push to registry:
+        # destination: myregistry.example.com/${IMAGE_NAME}:${IMAGE_TAG}
+        
+        # Or save as tar file (no registry push):
+        tarPath: /workspace/image.tar
+        
+        # Resource limits
+        resources:
+          cpu: 2.0
+          memory: 4096
+        
+        timeout: 1800
+
